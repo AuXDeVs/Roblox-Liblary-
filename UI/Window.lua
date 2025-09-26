@@ -18,7 +18,7 @@ function Window.new(title, subtitle, theme, elements)
     
     self.Theme = theme
     self.Elements = elements
-    self.title = title or "Roblox Library"
+    self.title = title or "Modern UI"
     self.subtitle = subtitle or "v1.0"
     
     self:CreateWindow()
