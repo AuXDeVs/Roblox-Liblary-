@@ -93,5 +93,21 @@ function UI:tween(obj, props, time)
     return tween
 end
 
-return UI
+return UI.colors.border
+    stroke.Thickness = thickness or self.theme.borderSize
+    stroke.Parent = parent
+    return stroke
+end
 
+function UI:tween(obj, props, time)
+    local info = TweenInfo.new(
+        time or self.theme.animTime,
+        Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out
+    )
+    local tween = TweenService:Create(obj, info, props)
+    tween:Play()
+    return tween
+end
+
+return UI
