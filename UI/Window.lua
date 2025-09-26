@@ -4,6 +4,8 @@ local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
+local Tabs = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Tabs.lua"))()
+
 local Window = {}
 Window.__index = Window
 
@@ -12,7 +14,7 @@ function Window:new(title, size, theme)
     
     self.theme = theme
     self.title = title or "Window"
-    self.size = size or UDim2.new(0, 500, 0, 400)
+    self.size = size or UDim2.new(0, 600, 0, 400)
     self.minimized = false
     self.originalSize = self.size
     
@@ -125,11 +127,15 @@ function Window:create()
     content.BackgroundTransparency = 1
     content.Parent = frame
     
+    -- Create tabs system
+    local tabs = Tabs:new(content, self.theme)
+    
     self.frame = frame
     self.content = content
     self.titleLabel = titleLabel
     self.close = close
     self.minimize = minimize
+    self.tabs = tabs
     
     self:events()
 end
@@ -168,6 +174,14 @@ function Window:events()
     self.minimize.MouseLeave:Connect(function()
         self:tween(self.minimize, {BackgroundColor3 = self.theme.colors.warning})
     end)
+end
+
+function Window:addTab(name)
+    return self.tabs:addTab(name)
+end
+
+function Window:selectTab(name)
+    self.tabs:selectTab(name)
 end
 
 function Window:setTitle(text)
