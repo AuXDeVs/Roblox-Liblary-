@@ -1,140 +1,218 @@
---[[
-
-Elements/Button.lua 
-
-
---]]
-
+local TweenService = game:GetService("TweenService")
 
 local Button = {}
 Button.__index = Button
 
-local TweenService = game:GetService("TweenService")
-
-function Button.new(parent, text, callback, theme)
-    local self = {}
-    setmetatable(self, Button)
+function Button:new(text, pos, size, parent, theme)
+    local self = setmetatable({}, Button)
     
-    self.Theme = theme
+    self.theme = theme
     self.text = text or "Button"
-    self.callback = callback or function() end
+    self.pos = pos or UDim2.new(0, 10, 0, 10)
+    self.size = size or UDim2.new(0, 120, 0, 35)
+    self.parent = parent
+    self.enabled = true
+    self.callback = nil
     
-    self:CreateButton(parent)
-    self:SetupEvents()
-    
+    self:create()
     return self
 end
 
-function Button:CreateButton(parent)
-    -- // Button
-    self.Button = Instance.new("TextButton")
-    self.Button.Parent = parent
-    self.Button.BackgroundColor3 = self.Theme.Secondary
-    self.Button.BorderSizePixel = 0
-    self.Button.Size = UDim2.new(1, 0, 0, 35)
-    self.Button.Font = Enum.Font.Gotham
-    self.Button.Text = self.text
-    self.Button.TextColor3 = self.Theme.Text
-    self.Button.TextScaled = true
-    self.Button.AutoButtonColor = false
-    
-    -- // Corner rds
-    local Corner = Instance.new("UICorner")
-    Corner.CornerRadius = UDim.new(0, 6)
-    Corner.Parent = self.Button
-    
-    -- // Border
-    local Border = Instance.new("UIStroke")
-    Border.Color = self.Theme.Border
-    Border.Thickness = 1
-    Border.Parent = self.Button
-    
-    -- // Riple
-    self.Ripple = Instance.new("Frame")
-    self.Ripple.Parent = self.Button
-    self.Ripple.BackgroundColor3 = self.Theme.Accent
-    self.Ripple.BackgroundTransparency = 1
-    self.Ripple.BorderSizePixel = 0
-    self.Ripple.Size = UDim2.new(0, 0, 0, 0)
-    self.Ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
-    self.Ripple.AnchorPoint = Vector2.new(0.5, 0.5)
-    self.Ripple.ZIndex = 2
-    
-    local RippleCorner = Instance.new("UICorner")
-    RippleCorner.CornerRadius = UDim.new(1, 0)
-    RippleCorner.Parent = self.Ripple
+function Button:corner(parent, radius)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = radius or self.theme.cornerRadius
+    corner.Parent = parent
+    return corner
 end
 
-function Button:SetupEvents()
-    
-    self.Button.MouseEnter:Connect(function()
-        local tween = TweenService:Create(
-            self.Button,
-            TweenInfo.new(0.2, Enum.EasingStyle.Quad),
-            {BackgroundColor3 = self.Theme.Accent}
-        )
-        tween:Play()
-    end)
-    
-    self.Button.MouseLeave:Connect(function()
-        local tween = TweenService:Create(
-            self.Button,
-            TweenInfo.new(0.2, Enum.EasingStyle.Quad),
-            {BackgroundColor3 = self.Theme.Secondary}
-        )
-        tween:Play()
-    end)
-    
-    self.Button.MouseButton1Down:Connect(function()
-        
-        local scaleDown = TweenService:Create(
-            self.Button,
-            TweenInfo.new(0.1, Enum.EasingStyle.Quad),
-            {Size = UDim2.new(1, -4, 0, 31)}
-        )
-        scaleDown:Play()
-        
-        self.Ripple.Size = UDim2.new(0, 0, 0, 0)
-        self.Ripple.BackgroundTransparency = 0.7
-        
-        local rippleExpand = TweenService:Create(
-            self.Ripple,
-            TweenInfo.new(0.3, Enum.EasingStyle.Quad),
-            {
-                Size = UDim2.new(0, 100, 0, 100),
-                BackgroundTransparency = 1
-            }
-        )
-        rippleExpand:Play()
-    end)
-    
-    self.Button.MouseButton1Up:Connect(function()
+function Button:stroke(parent, color, thickness)
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = color or self.theme.colors.border
+    stroke.Thickness = thickness or self.theme.borderSize
+    stroke.Parent = parent
+    return stroke
+end
 
-        local scaleUp = TweenService:Create(
-            self.Button,
-            TweenInfo.new(0.1, Enum.EasingStyle.Quad),
-            {Size = UDim2.new(1, 0, 0, 35)}
-        )
-        scaleUp:Play()
-        
-        -- // call back
-        if self.callback then
-            self.callback()
+function Button:tween(obj, props, time)
+    local info = TweenInfo.new(
+        time or self.theme.animTime,
+        Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out
+    )
+    local tween = TweenService:Create(obj, info, props)
+    tween:Play()
+    return tween
+end
+
+function Button:create()
+    local btn = Instance.new("TextButton")
+    btn.Name = "Button"
+    btn.Size = self.size
+    btn.Position = self.pos
+    btn.BackgroundColor3 = self.theme.colors.accent
+    btn.Text = self.text
+    btn.TextColor3 = self.theme.colors.text
+    btn.TextScaled = true
+    btn.Font = self.theme.font
+    btn.BorderSizePixel = 0
+    btn.AutoButtonColor = false
+    btn.Parent = self.parent
+    
+    self:corner(btn)
+    self:stroke(btn, self.theme.colors.border, 1)
+    
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))
+    }
+    gradient.Rotation = 90
+    gradient.Transparency = NumberSequence.new{
+        NumberSequenceKeypoint.new(0, 0.9),
+        NumberSequenceKeypoint.new(1, 0.95)
+    }
+    gradient.Parent = btn
+    
+    local effect = Instance.new("Frame")
+    effect.Name = "Effect"
+    effect.Size = UDim2.new(1, 0, 1, 0)
+    effect.Position = UDim2.new(0, 0, 0, 0)
+    effect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    effect.BackgroundTransparency = 1
+    effect.BorderSizePixel = 0
+    effect.Parent = btn
+    
+    self:corner(effect)
+    
+    local shadow = Instance.new("Frame")
+    shadow.Name = "Shadow"
+    shadow.Size = UDim2.new(1, 6, 1, 6)
+    shadow.Position = UDim2.new(0, -3, 0, -3)
+    shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    shadow.BackgroundTransparency = 0.7
+    shadow.ZIndex = btn.ZIndex - 1
+    shadow.BorderSizePixel = 0
+    shadow.Parent = btn
+    
+    self:corner(shadow)
+    
+    self.btn = btn
+    self.effect = effect
+    self.shadow = shadow
+    
+    self:events()
+end
+
+function Button:events()
+    self.btn.MouseEnter:Connect(function()
+        if self.enabled then
+            self:tween(self.btn, {
+                BackgroundColor3 = self.theme.colors.accentHover,
+                Size = UDim2.new(self.size.X.Scale, self.size.X.Offset + 2, self.size.Y.Scale, self.size.Y.Offset + 1)
+            })
+            self:tween(self.shadow, {BackgroundTransparency = 0.5})
+        end
+    end)
+    
+    self.btn.MouseLeave:Connect(function()
+        if self.enabled then
+            self:tween(self.btn, {
+                BackgroundColor3 = self.theme.colors.accent,
+                Size = self.size
+            })
+            self:tween(self.shadow, {BackgroundTransparency = 0.7})
+        end
+    end)
+    
+    self.btn.MouseButton1Down:Connect(function()
+        if self.enabled then
+            self:tween(self.btn, {
+                Size = UDim2.new(self.size.X.Scale, self.size.X.Offset - 2, self.size.Y.Scale, self.size.Y.Offset - 1)
+            }, 0.1)
+            self:tween(self.effect, {BackgroundTransparency = 0.8}, 0.1)
+        end
+    end)
+    
+    self.btn.MouseButton1Up:Connect(function()
+        if self.enabled then
+            self:tween(self.btn, {Size = self.size}, 0.1)
+            self:tween(self.effect, {BackgroundTransparency = 1}, 0.2)
+            
+            if self.callback then
+                self.callback()
+            end
         end
     end)
 end
 
-function Button:SetText(newText)
-    self.text = newText
-    self.Button.Text = newText
+function Button:setText(text)
+    self.text = text
+    self.btn.Text = text
 end
 
-function Button:SetCallback(newCallback)
-    self.callback = newCallback
+function Button:setCallback(func)
+    self.callback = func
 end
 
-function Button:Destroy()
-    self.Button:Destroy()
+function Button:setEnabled(enabled)
+    self.enabled = enabled
+    if enabled then
+        self.btn.BackgroundColor3 = self.theme.colors.accent
+        self.btn.TextColor3 = self.theme.colors.text
+        self.btn.BackgroundTransparency = 0
+    else
+        self.btn.BackgroundColor3 = self.theme.colors.border
+        self.btn.TextColor3 = self.theme.colors.textSecondary
+        self.btn.BackgroundTransparency = 0.5
+    end
+end
+
+function Button:setColor(color)
+    self.btn.BackgroundColor3 = color
+end
+
+function Button:success()
+    local original = self.btn.BackgroundColor3
+    self:tween(self.btn, {BackgroundColor3 = self.theme.colors.success})
+    
+    spawn(function()
+        wait(1)
+        self:tween(self.btn, {BackgroundColor3 = original})
+    end)
+end
+
+function Button:error()
+    local original = self.btn.BackgroundColor3
+    self:tween(self.btn, {BackgroundColor3 = Color3.fromRGB(220, 53, 69)})
+    
+    spawn(function()
+        wait(1)
+        self:tween(self.btn, {BackgroundColor3 = original})
+    end)
+end
+
+function Button:loading(state)
+    if state then
+        self.btn.Text = "..."
+        self:setEnabled(false)
+    else
+        self.btn.Text = self.text
+        self:setEnabled(true)
+    end
+end
+
+function Button:show()
+    self.btn.Visible = true
+end
+
+function Button:hide()
+    self.btn.Visible = false
+end
+
+function Button:destroy()
+    if self.btn then
+        self.btn:Destroy()
+    end
 end
 
 return Button
