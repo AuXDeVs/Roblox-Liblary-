@@ -1,169 +1,195 @@
---[[
-
-Elements/Toggle.lua
-
---]]
-
+local TweenService = game:GetService("TweenService")
 
 local Toggle = {}
 Toggle.__index = Toggle
 
-local TweenService = game:GetService("TweenService")
-
-function Toggle.new(parent, text, default, callback, theme)
-    local self = {}
-    setmetatable(self, Toggle)
+function Toggle:new(pos, size, parent, theme, state)
+    local self = setmetatable({}, Toggle)
     
-    self.Theme = theme
-    self.text = text or "Toggle"
-    self.state = default or false
-    self.callback = callback or function() end
+    self.theme = theme
+    self.pos = pos or UDim2.new(0, 10, 0, 10)
+    self.size = size or UDim2.new(0, 60, 0, 30)
+    self.parent = parent
+    self.state = state or false
+    self.callback = nil
+    self.enabled = true
     
-    self:CreateToggle(parent)
-    self:SetupEvents()
-    self:UpdateToggle()
-    
+    self:create()
     return self
 end
 
-function Toggle:CreateToggle(parent)
-    -- Main Frame
-    self.Frame = Instance.new("Frame")
-    self.Frame.Parent = parent
-    self.Frame.BackgroundColor3 = self.Theme.Secondary
-    self.Frame.BorderSizePixel = 0
-    self.Frame.Size = UDim2.new(1, 0, 0, 35)
-    
-    -- // Corner rds
-    local Corner = Instance.new("UICorner")
-    Corner.CornerRadius = UDim.new(0, 6)
-    Corner.Parent = self.Frame
-    
-    -- // Border
-    local Border = Instance.new("UIStroke")
-    Border.Color = self.Theme.Border
-    Border.Thickness = 1
-    Border.Parent = self.Frame
-    
-    -- // Text Label
-    self.Label = Instance.new("TextLabel")
-    self.Label.Parent = self.Frame
-    self.Label.BackgroundTransparency = 1
-    self.Label.Position = UDim2.new(0, 12, 0, 0)
-    self.Label.Size = UDim2.new(1, -60, 1, 0)
-    self.Label.Font = Enum.Font.Gotham
-    self.Label.Text = self.text
-    self.Label.TextColor3 = self.Theme.Text
-    self.Label.TextScaled = true
-    self.Label.TextXAlignment = Enum.TextXAlignment.Left
-    
-    -- // Toggle Bkrund
-    self.ToggleBg = Instance.new("Frame")
-    self.ToggleBg.Parent = self.Frame
-    self.ToggleBg.BackgroundColor3 = self.Theme.Border
-    self.ToggleBg.BorderSizePixel = 0
-    self.ToggleBg.Position = UDim2.new(1, -40, 0.5, -8)
-    self.ToggleBg.Size = UDim2.new(0, 32, 0, 16)
-    
-    local ToggleBgCorner = Instance.new("UICorner")
-    ToggleBgCorner.CornerRadius = UDim.new(0, 8)
-    ToggleBgCorner.Parent = self.ToggleBg
-    
-    -- // Toggle 
-    self.ToggleBtn = Instance.new("Frame")
-    self.ToggleBtn.Parent = self.ToggleBg
-    self.ToggleBtn.BackgroundColor3 = self.Theme.Text
-    self.ToggleBtn.BorderSizePixel = 0
-    self.ToggleBtn.Position = UDim2.new(0, 2, 0.5, 0)
-    self.ToggleBtn.Size = UDim2.new(0, 12, 0, 12)
-    self.ToggleBtn.AnchorPoint = Vector2.new(0, 0.5)
-    
-    local ToggleBtnCorner = Instance.new("UICorner")
-    ToggleBtnCorner.CornerRadius = UDim.new(0, 6)
-    ToggleBtnCorner.Parent = self.ToggleBtn
-    
-    -- // Click dct
-    self.ClickDetector = Instance.new("TextButton")
-    self.ClickDetector.Parent = self.Frame
-    self.ClickDetector.BackgroundTransparency = 1
-    self.ClickDetector.Size = UDim2.new(1, 0, 1, 0)
-    self.ClickDetector.Text = ""
+function Toggle:corner(parent, radius)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = radius or UDim.new(0, 15)
+    corner.Parent = parent
+    return corner
 end
 
-function Toggle:SetupEvents()
+function Toggle:stroke(parent, color, thickness)
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = color or self.theme.colors.border
+    stroke.Thickness = thickness or self.theme.borderSize
+    stroke.Parent = parent
+    return stroke
+end
+
+function Toggle:tween(obj, props, time)
+    local info = TweenInfo.new(
+        time or self.theme.animTime,
+        Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out
+    )
+    local tween = TweenService:Create(obj, info, props)
+    tween:Play()
+    return tween
+end
+
+function Toggle:create()
+    local bg = Instance.new("TextButton")
+    bg.Name = "ToggleBG"
+    bg.Size = self.size
+    bg.Position = self.pos
+    bg.BackgroundColor3 = self.state and self.theme.colors.accent or self.theme.colors.border
+    bg.Text = ""
+    bg.BorderSizePixel = 0
+    bg.AutoButtonColor = false
+    bg.Parent = self.parent
     
-    self.ClickDetector.MouseEnter:Connect(function()
-        local tween = TweenService:Create(
-            self.Frame,
-            TweenInfo.new(0.2, Enum.EasingStyle.Quad),
-            {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}
-        )
-        tween:Play()
+    self:corner(bg, UDim.new(0, self.size.Y.Offset / 2))
+    
+    local switchSize = self.size.Y.Offset - 6
+    local switch = Instance.new("Frame")
+    switch.Name = "Switch"
+    switch.Size = UDim2.new(0, switchSize, 0, switchSize)
+    switch.Position = self.state and 
+        UDim2.new(0, self.size.X.Offset - switchSize - 3, 0, 3) or 
+        UDim2.new(0, 3, 0, 3)
+    switch.BackgroundColor3 = self.theme.colors.text
+    switch.BorderSizePixel = 0
+    switch.Parent = bg
+    
+    self:corner(switch, UDim.new(0, switchSize / 2))
+    
+    local glow = Instance.new("Frame")
+    glow.Name = "Glow"
+    glow.Size = UDim2.new(0, switchSize - 4, 0, switchSize - 4)
+    glow.Position = UDim2.new(0, 2, 0, 2)
+    glow.BackgroundColor3 = self.state and self.theme.colors.accentHover or self.theme.colors.textSecondary
+    glow.BackgroundTransparency = 0.7
+    glow.BorderSizePixel = 0
+    glow.Parent = switch
+    
+    self:corner(glow, UDim.new(0, (switchSize - 4) / 2))
+    
+    local shadow = Instance.new("Frame")
+    shadow.Name = "Shadow"
+    shadow.Size = UDim2.new(1, 4, 1, 4)
+    shadow.Position = UDim2.new(0, -2, 0, -2)
+    shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    shadow.BackgroundTransparency = 0.8
+    shadow.ZIndex = bg.ZIndex - 1
+    shadow.BorderSizePixel = 0
+    shadow.Parent = bg
+    
+    self:corner(shadow, UDim.new(0, self.size.Y.Offset / 2))
+    
+    self.bg = bg
+    self.switch = switch
+    self.glow = glow
+    self.shadow = shadow
+    
+    self:events()
+end
+
+function Toggle:events()
+    self.bg.MouseButton1Click:Connect(function()
+        if self.enabled then
+            self:setState(not self.state)
+            
+            if self.callback then
+                self.callback(self.state)
+            end
+        end
     end)
     
-    self.ClickDetector.MouseLeave:Connect(function()
-        local tween = TweenService:Create(
-            self.Frame,
-            TweenInfo.new(0.2, Enum.EasingStyle.Quad),
-            {BackgroundColor3 = self.Theme.Secondary}
-        )
-        tween:Play()
+    self.bg.MouseEnter:Connect(function()
+        if self.enabled then
+            self:tween(self.switch, {
+                Size = UDim2.new(0, self.size.Y.Offset - 4, 0, self.size.Y.Offset - 4)
+            }, 0.1)
+            self:tween(self.shadow, {BackgroundTransparency = 0.6})
+        end
     end)
     
-    -- // Click event
-    self.ClickDetector.MouseButton1Click:Connect(function()
-        self:Toggle()
+    self.bg.MouseLeave:Connect(function()
+        if self.enabled then
+            local switchSize = self.size.Y.Offset - 6
+            self:tween(self.switch, {
+                Size = UDim2.new(0, switchSize, 0, switchSize)
+            }, 0.1)
+            self:tween(self.shadow, {BackgroundTransparency = 0.8})
+        end
     end)
 end
 
-function Toggle:Toggle()
-    self.state = not self.state
-    self:UpdateToggle()
+function Toggle:setState(state, anim)
+    self.state = state
+    local switchSize = self.size.Y.Offset - 6
     
-    if self.callback then
-        self.callback(self.state)
+    if anim ~= false then
+        self:tween(self.bg, {
+            BackgroundColor3 = self.state and self.theme.colors.accent or self.theme.colors.border
+        })
+        
+        self:tween(self.switch, {
+            Position = self.state and 
+                UDim2.new(0, self.size.X.Offset - switchSize - 3, 0, 3) or 
+                UDim2.new(0, 3, 0, 3)
+        })
+        
+        self:tween(self.glow, {
+            BackgroundColor3 = self.state and self.theme.colors.accentHover or self.theme.colors.textSecondary
+        })
+    else
+        self.bg.BackgroundColor3 = self.state and self.theme.colors.accent or self.theme.colors.border
+        self.switch.Position = self.state and 
+            UDim2.new(0, self.size.X.Offset - switchSize - 3, 0, 3) or 
+            UDim2.new(0, 3, 0, 3)
+        self.glow.BackgroundColor3 = self.state and self.theme.colors.accentHover or self.theme.colors.textSecondary
     end
 end
 
-function Toggle:UpdateToggle()
-    local bgColor = self.state and self.Theme.Accent or self.Theme.Border
-    local btnPosition = self.state and UDim2.new(1, -14, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
-    
-    local bgTween = TweenService:Create(
-        self.ToggleBg,
-        TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-        {BackgroundColor3 = bgColor}
-    )
-    bgTween:Play()
-    
-    local btnTween = TweenService:Create(
-        self.ToggleBtn,
-        TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-        {Position = btnPosition}
-    )
-    btnTween:Play()
+function Toggle:setCallback(func)
+    self.callback = func
 end
 
-function Toggle:SetState(newState)
-    self.state = newState
-    self:UpdateToggle()
+function Toggle:setEnabled(enabled)
+    self.enabled = enabled
+    if enabled then
+        self.bg.BackgroundTransparency = 0
+        self.switch.BackgroundTransparency = 0
+    else
+        self.bg.BackgroundTransparency = 0.5
+        self.switch.BackgroundTransparency = 0.5
+    end
 end
 
-function Toggle:GetState()
+function Toggle:getState()
     return self.state
 end
 
-function Toggle:SetText(newText)
-    self.text = newText
-    self.Label.Text = newText
+function Toggle:show()
+    self.bg.Visible = true
 end
 
-function Toggle:SetCallback(newCallback)
-    self.callback = newCallback
+function Toggle:hide()
+    self.bg.Visible = false
 end
 
-function Toggle:Destroy()
-    self.Frame:Destroy()
+function Toggle:destroy()
+    if self.bg then
+        self.bg:Destroy()
+    end
 end
 
 return Toggle
