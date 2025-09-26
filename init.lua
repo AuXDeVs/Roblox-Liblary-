@@ -7,6 +7,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 local Window = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Window.lua"))()
 local TextLabel = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/TextLabel.lua"))()
+local Tabs = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Tabs.lua"))() -- FIXED: ADDED THIS LINE
 local Button = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Button.lua"))()
 local Toggle = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Toggle.lua"))()
 local TextBox = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Textbox.lua"))()
@@ -67,6 +68,10 @@ function UI:label(text, pos, size, parent)
     return TextLabel:new(text, pos, size, parent, self.theme)
 end
 
+function UI:tabs(parent) -- FIXED: ADDED TABS METHOD
+    return Tabs:new(parent, self.theme)
+end
+
 function UI:corner(parent, radius)
     local corner = Instance.new("UICorner")
     corner.CornerRadius = radius or self.theme.cornerRadius
@@ -77,23 +82,6 @@ end
 function UI:stroke(parent, color, thickness)
     local stroke = Instance.new("UIStroke")
     stroke.Color = color or self.theme.colors.border
-    stroke.Thickness = thickness or self.theme.borderSize
-    stroke.Parent = parent
-    return stroke
-end
-
-function UI:tween(obj, props, time)
-    local info = TweenInfo.new(
-        time or self.theme.animTime,
-        Enum.EasingStyle.Quad,
-        Enum.EasingDirection.Out
-    )
-    local tween = TweenService:Create(obj, info, props)
-    tween:Play()
-    return tween
-end
-
-return UI.colors.border
     stroke.Thickness = thickness or self.theme.borderSize
     stroke.Parent = parent
     return stroke
