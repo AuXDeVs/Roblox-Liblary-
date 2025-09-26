@@ -1,199 +1,196 @@
---[[
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
-UI/Window.lua 
-
---]]
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 local Window = {}
 Window.__index = Window
 
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-function Window.new(title, subtitle, theme, elements)
-    local self = {}
-    setmetatable(self, Window)
+function Window:new(title, size, theme)
+    local self = setmetatable({}, Window)
     
-    self.Theme = theme
-    self.Elements = elements
-    self.title = title or "Modern UI"
-    self.subtitle = subtitle or "v1.0"
+    self.theme = theme
+    self.title = title or "Window"
+    self.size = size or UDim2.new(0, 500, 0, 400)
+    self.minimized = false
+    self.originalSize = self.size
     
-    self:CreateWindow()
-    self:SetupDragging()
-    self:SetupMinimize()
-    
+    self:create()
     return self
 end
 
-function Window:CreateWindow()
-    -- // Create ScreenGui
-    self.ScreenGui = Instance.new("ScreenGui")
-    self.ScreenGui.Name = "ModernUILibrary"
-    self.ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-    self.ScreenGui.ResetOnSpawn = false
-    self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    
-    -- // Main Frame
-    self.MainFrame = Instance.new("Frame")
-    self.MainFrame.Name = "MainFrame"
-    self.MainFrame.Parent = self.ScreenGui
-    self.MainFrame.BackgroundColor3 = self.Theme.Background
-    self.MainFrame.BorderSizePixel = 0
-    self.MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
-    self.MainFrame.Size = UDim2.new(0, 400, 0, 500)
-    self.MainFrame.ClipsDescendants = true
-    
-  -- // Corner frame Rds
-    local Corner = Instance.new("UICorner")
-    Corner.CornerRadius = UDim.new(0, 8)
-    Corner.Parent = self.MainFrame
-    
-    -- // Border
-    local Border = Instance.new("UIStroke")
-    Border.Color = self.Theme.Border
-    Border.Thickness = 1
-    Border.Parent = self.MainFrame
-    
-    -- // Header
-    self.Header = Instance.new("Frame")
-    self.Header.Name = "Header"
-    self.Header.Parent = self.MainFrame
-    self.Header.BackgroundColor3 = self.Theme.Secondary
-    self.Header.BorderSizePixel = 0
-    self.Header.Size = UDim2.new(1, 0, 0, 40)
-    
-    local HeaderCorner = Instance.new("UICorner")
-    HeaderCorner.CornerRadius = UDim.new(0, 8)
-    HeaderCorner.Parent = self.Header
-    
-    -- // Title
-    self.TitleLabel = Instance.new("TextLabel")
-    self.TitleLabel.Name = "Title"
-    self.TitleLabel.Parent = self.Header
-    self.TitleLabel.BackgroundTransparency = 1
-    self.TitleLabel.Position = UDim2.new(0, 15, 0, 0)
-    self.TitleLabel.Size = UDim2.new(0.7, 0, 1, 0)
-    self.TitleLabel.Font = Enum.Font.GothamBold
-    self.TitleLabel.Text = self.title
-    self.TitleLabel.TextColor3 = self.Theme.Text
-    self.TitleLabel.TextScaled = true
-    self.TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    
-    -- // Minimize Button
-    self.MinimizeBtn = Instance.new("TextButton")
-    self.MinimizeBtn.Name = "MinimizeBtn"
-    self.MinimizeBtn.Parent = self.Header
-    self.MinimizeBtn.BackgroundColor3 = self.Theme.Accent
-    self.MinimizeBtn.BorderSizePixel = 0
-    self.MinimizeBtn.Position = UDim2.new(1, -35, 0.5, -10)
-    self.MinimizeBtn.Size = UDim2.new(0, 20, 0, 20)
-    self.MinimizeBtn.Font = Enum.Font.GothamBold
-    self.MinimizeBtn.Text = "-"
-    self.MinimizeBtn.TextColor3 = self.Theme.Text
-    self.MinimizeBtn.TextScaled = true
-    
-    local MinCorner = Instance.new("UICorner")
-    MinCorner.CornerRadius = UDim.new(0, 4)
-    MinCorner.Parent = self.MinimizeBtn
-    
-    -- // Content Frame
-    self.ContentFrame = Instance.new("ScrollingFrame")
-    self.ContentFrame.Name = "Content"
-    self.ContentFrame.Parent = self.MainFrame
-    self.ContentFrame.BackgroundTransparency = 1
-    self.ContentFrame.Position = UDim2.new(0, 0, 0, 50)
-    self.ContentFrame.Size = UDim2.new(1, 0, 1, -50)
-    self.ContentFrame.ScrollBarThickness = 4
-    self.ContentFrame.ScrollBarImageColor3 = self.Theme.Accent
-    self.ContentFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-    self.ContentFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    
-    -- // Layout
-    local Layout = Instance.new("UIListLayout")
-    Layout.Parent = self.ContentFrame
-    Layout.Padding = UDim.new(0, 8)
-    Layout.SortOrder = Enum.SortOrder.LayoutOrder
-    
-    local Padding = Instance.new("UIPadding")
-    Padding.Parent = self.ContentFrame
-    Padding.PaddingTop = UDim.new(0, 10)
-    Padding.PaddingBottom = UDim.new(0, 10)
-    Padding.PaddingLeft = UDim.new(0, 15)
-    Padding.PaddingRight = UDim.new(0, 15)
+function Window:corner(parent, radius)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = radius or self.theme.cornerRadius
+    corner.Parent = parent
+    return corner
 end
 
-function Window:SetupMinimize()
-    self.isMinimized = false
-    self.originalSize = self.MainFrame.Size
-    
-    self.MinimizeBtn.MouseButton1Click:Connect(function()
-        self.isMinimized = not self.isMinimized
-        local targetSize = self.isMinimized and UDim2.new(0, 400, 0, 40) or self.originalSize
-        self.MinimizeBtn.Text = self.isMinimized and "+" or "-"
-        
-        local tween = TweenService:Create(
-            self.MainFrame,
-            TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-            {Size = targetSize}
-        )
-        tween:Play()
-    end)
+function Window:stroke(parent, color, thickness)
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = color or self.theme.colors.border
+    stroke.Thickness = thickness or self.theme.borderSize
+    stroke.Parent = parent
+    return stroke
 end
 
-function Window:SetupDragging()
-    local dragging = false
-    local dragStart = nil
-    local startPos = nil
+function Window:tween(obj, props, time)
+    local info = TweenInfo.new(
+        time or self.theme.animTime,
+        Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out
+    )
+    local tween = TweenService:Create(obj, info, props)
+    tween:Play()
+    return tween
+end
+
+function Window:create()
+    local gui = PlayerGui:FindFirstChild("ModernUI")
+    if not gui then
+        gui = Instance.new("ScreenGui")
+        gui.Name = "ModernUI"
+        gui.Parent = PlayerGui
+        gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    end
     
-    self.Header.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = self.MainFrame.Position
+    local frame = Instance.new("Frame")
+    frame.Name = "Window"
+    frame.Size = self.size
+    frame.Position = UDim2.new(0.5, -self.size.X.Offset/2, 0.5, -self.size.Y.Offset/2)
+    frame.BackgroundColor3 = self.theme.colors.primary
+    frame.BorderSizePixel = 0
+    frame.Active = true
+    frame.Draggable = true
+    frame.Parent = gui
+    
+    self:corner(frame)
+    self:stroke(frame, self.theme.colors.border, 2)
+    
+    local titlebar = Instance.new("Frame")
+    titlebar.Name = "Titlebar"
+    titlebar.Size = UDim2.new(1, 0, 0, 35)
+    titlebar.Position = UDim2.new(0, 0, 0, 0)
+    titlebar.BackgroundColor3 = self.theme.colors.secondary
+    titlebar.BorderSizePixel = 0
+    titlebar.Parent = frame
+    
+    self:corner(titlebar)
+    
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "Title"
+    titleLabel.Size = UDim2.new(1, -80, 1, 0)
+    titleLabel.Position = UDim2.new(0, 10, 0, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = self.title
+    titleLabel.TextColor3 = self.theme.colors.text
+    titleLabel.TextScaled = true
+    titleLabel.Font = self.theme.font
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Parent = titlebar
+    
+    local minimize = Instance.new("TextButton")
+    minimize.Name = "Minimize"
+    minimize.Size = UDim2.new(0, 25, 0, 25)
+    minimize.Position = UDim2.new(1, -60, 0, 5)
+    minimize.BackgroundColor3 = self.theme.colors.warning
+    minimize.Text = "−"
+    minimize.TextColor3 = self.theme.colors.text
+    minimize.TextScaled = true
+    minimize.Font = self.theme.font
+    minimize.BorderSizePixel = 0
+    minimize.Parent = titlebar
+    
+    self:corner(minimize, UDim.new(0, 3))
+    
+    local close = Instance.new("TextButton")
+    close.Name = "Close"
+    close.Size = UDim2.new(0, 25, 0, 25)
+    close.Position = UDim2.new(1, -30, 0, 5)
+    close.BackgroundColor3 = self.theme.colors.accent
+    close.Text = "×"
+    close.TextColor3 = self.theme.colors.text
+    close.TextScaled = true
+    close.Font = self.theme.font
+    close.BorderSizePixel = 0
+    close.Parent = titlebar
+    
+    self:corner(close, UDim.new(0, 3))
+    
+    local content = Instance.new("Frame")
+    content.Name = "Content"
+    content.Size = UDim2.new(1, -20, 1, -45)
+    content.Position = UDim2.new(0, 10, 0, 40)
+    content.BackgroundTransparency = 1
+    content.Parent = frame
+    
+    self.frame = frame
+    self.content = content
+    self.titleLabel = titleLabel
+    self.close = close
+    self.minimize = minimize
+    
+    self:events()
+end
+
+function Window:events()
+    self.minimize.MouseButton1Click:Connect(function()
+        if not self.minimized then
+            self:tween(self.frame, {Size = UDim2.new(0, self.originalSize.X.Offset, 0, 35)})
+            self.content.Visible = false
+            self.minimize.Text = "□"
+            self.minimized = true
+        else
+            self:tween(self.frame, {Size = self.originalSize})
+            self.content.Visible = true
+            self.minimize.Text = "−"
+            self.minimized = false
         end
     end)
     
-    UserInputService.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local delta = input.Position - dragStart
-            self.MainFrame.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
-        end
+    self.close.MouseButton1Click:Connect(function()
+        self:destroy()
     end)
     
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
+    self.close.MouseEnter:Connect(function()
+        self:tween(self.close, {BackgroundColor3 = self.theme.colors.accentHover})
+    end)
+    
+    self.close.MouseLeave:Connect(function()
+        self:tween(self.close, {BackgroundColor3 = self.theme.colors.accent})
+    end)
+    
+    self.minimize.MouseEnter:Connect(function()
+        self:tween(self.minimize, {BackgroundColor3 = Color3.fromRGB(255, 200, 0)})
+    end)
+    
+    self.minimize.MouseLeave:Connect(function()
+        self:tween(self.minimize, {BackgroundColor3 = self.theme.colors.warning})
     end)
 end
 
--- // Add Elements
-function Window:AddButton(text, callback)
-    return self.Elements.Button.new(self.ContentFrame, text, callback, self.Theme)
+function Window:setTitle(text)
+    self.title = text
+    self.titleLabel.Text = text
 end
 
-function Window:AddToggle(text, default, callback)
-    return self.Elements.Toggle.new(self.ContentFrame, text, default, callback, self.Theme)
+function Window:destroy()
+    if self.frame then
+        self.frame:Destroy()
+    end
 end
 
-function Window:AddTextbox(placeholder, callback)
-    return self.Elements.Textbox.new(self.ContentFrame, placeholder, callback, self.Theme)
+function Window:hide()
+    if self.frame then
+        self.frame.Visible = false
+    end
 end
 
-function Window:AddLabel(text)
-    return self.Elements.TextLabel.new(self.ContentFrame, text, self.Theme)
-end
-
-function Window:Destroy()
-    self.ScreenGui:Destroy()
+function Window:show()
+    if self.frame then
+        self.frame.Visible = true
+    end
 end
 
 return Window
