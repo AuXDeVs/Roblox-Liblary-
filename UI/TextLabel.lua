@@ -6,33 +6,42 @@ function TextLabel:new(text, pos, size, parent, theme)
     
     self.theme = theme
     
+    local labelFrame = Instance.new("Frame")
+    labelFrame.Name = "TextLabel"
+    labelFrame.Size = UDim2.new(1, -20, 0, 35)
+    labelFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
+    labelFrame.BackgroundColor3 = theme.colors.secondary
+    labelFrame.BorderSizePixel = 0
+    labelFrame.Parent = parent
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = labelFrame
+    
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = theme.colors.border
+    stroke.Thickness = 1
+    stroke.Parent = labelFrame
+    
     local label = Instance.new("TextLabel")
-    label.Name = "TextLabel"
-    label.Size = size
-    label.Position = pos
+    label.Name = "Label"
+    label.Size = UDim2.new(1, -20, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
     label.BackgroundTransparency = 1
     label.Text = text
     label.TextColor3 = theme.colors.text
-    label.TextScaled = true
+    label.TextSize = 16
     label.Font = theme.font
     label.TextXAlignment = Enum.TextXAlignment.Left
-    label.Parent = parent
-    
-    local padding = Instance.new("UIPadding")
-    padding.PaddingLeft = UDim.new(0, 5)
-    padding.PaddingRight = UDim.new(0, 5)
-    padding.Parent = label
+    label.Parent = labelFrame
     
     self.label = label
+    self.labelFrame = labelFrame
     return self
 end
 
 function TextLabel:setText(text)
     self.label.Text = text
-end
-
-function TextLabel:setColor(color)
-    self.label.TextColor3 = color
 end
 
 return TextLabel
