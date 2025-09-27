@@ -48,7 +48,8 @@ function Tabs:create()
     
     local leftFrame = Instance.new("Frame")
     leftFrame.Name = "LeftFrame"
-    leftFrame.Size = UDim2.new(0, 180, 1, 0)
+    -- FIXED: Reduced width from 180 to 160 for better proportions
+    leftFrame.Size = UDim2.new(0, 160, 1, 0)
     leftFrame.Position = UDim2.new(0, 0, 0, 0)
     leftFrame.BackgroundColor3 = self.theme.colors.secondary
     leftFrame.BorderSizePixel = 0
@@ -59,8 +60,9 @@ function Tabs:create()
     
     local profileFrame = Instance.new("Frame")
     profileFrame.Name = "Profile"
-    profileFrame.Size = UDim2.new(1, -10, 0, 60)
-    profileFrame.Position = UDim2.new(0, 5, 1, -65)
+    -- FIXED: Reduced height and better positioning
+    profileFrame.Size = UDim2.new(1, -8, 0, 55)
+    profileFrame.Position = UDim2.new(0, 4, 1, -59)
     profileFrame.BackgroundColor3 = self.theme.colors.primary
     profileFrame.BorderSizePixel = 0
     profileFrame.Parent = leftFrame
@@ -69,58 +71,64 @@ function Tabs:create()
     
     local avatar = Instance.new("ImageLabel")
     avatar.Name = "Avatar"
-    avatar.Size = UDim2.new(0, 40, 0, 40)
-    avatar.Position = UDim2.new(0, 10, 0, 10)
+    -- FIXED: Smaller avatar
+    avatar.Size = UDim2.new(0, 35, 0, 35)
+    avatar.Position = UDim2.new(0, 8, 0, 10)
     avatar.BackgroundColor3 = self.theme.colors.border
     avatar.BorderSizePixel = 0
     avatar.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. LocalPlayer.UserId .. "&width=150&height=150&format=png"
     avatar.Parent = profileFrame
     
-    self:corner(avatar, UDim.new(0, 20))
+    self:corner(avatar, UDim.new(0, 17))
     
     local nameLabel = Instance.new("TextLabel")
     nameLabel.Name = "PlayerName"
-    nameLabel.Size = UDim2.new(1, -60, 0, 20)
-    nameLabel.Position = UDim2.new(0, 55, 0, 10)
+    -- FIXED: Better positioning for name
+    nameLabel.Size = UDim2.new(1, -50, 0, 18)
+    nameLabel.Position = UDim2.new(0, 48, 0, 8)
     nameLabel.BackgroundTransparency = 1
     nameLabel.Text = LocalPlayer.Name
     nameLabel.TextColor3 = self.theme.colors.text
-    nameLabel.TextScaled = true
+    nameLabel.TextSize = 13
     nameLabel.Font = self.theme.font
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.Parent = profileFrame
     
     local displayLabel = Instance.new("TextLabel")
     displayLabel.Name = "DisplayName"
-    displayLabel.Size = UDim2.new(1, -60, 0, 15)
-    displayLabel.Position = UDim2.new(0, 55, 0, 30)
+    -- FIXED: Better positioning for display name
+    displayLabel.Size = UDim2.new(1, -50, 0, 14)
+    displayLabel.Position = UDim2.new(0, 48, 0, 28)
     displayLabel.BackgroundTransparency = 1
     displayLabel.Text = "@" .. LocalPlayer.DisplayName
     displayLabel.TextColor3 = self.theme.colors.textSecondary
-    displayLabel.TextScaled = true
+    displayLabel.TextSize = 11
     displayLabel.Font = self.theme.font
     displayLabel.TextXAlignment = Enum.TextXAlignment.Left
     displayLabel.Parent = profileFrame
     
     local tabsScroll = Instance.new("ScrollingFrame")
     tabsScroll.Name = "TabsScroll"
-    tabsScroll.Size = UDim2.new(1, -10, 1, -75)
-    tabsScroll.Position = UDim2.new(0, 5, 0, 5)
+    -- FIXED: Better positioning and sizing
+    tabsScroll.Size = UDim2.new(1, -8, 1, -68)
+    tabsScroll.Position = UDim2.new(0, 4, 0, 4)
     tabsScroll.BackgroundTransparency = 1
-    tabsScroll.ScrollBarThickness = 6
+    tabsScroll.ScrollBarThickness = 4
     tabsScroll.ScrollBarImageColor3 = self.theme.colors.accent
     tabsScroll.BorderSizePixel = 0
     tabsScroll.Parent = leftFrame
     
     local tabsList = Instance.new("UIListLayout")
     tabsList.SortOrder = Enum.SortOrder.LayoutOrder
-    tabsList.Padding = UDim.new(0, 5)
+    -- FIXED: Reduced padding for better spacing
+    tabsList.Padding = UDim.new(0, 3)
     tabsList.Parent = tabsScroll
     
     local rightFrame = Instance.new("Frame")
     rightFrame.Name = "RightFrame"
-    rightFrame.Size = UDim2.new(1, -185, 1, 0)
-    rightFrame.Position = UDim2.new(0, 185, 0, 0)
+    -- FIXED: Adjusted positioning to match new left frame width
+    rightFrame.Size = UDim2.new(1, -165, 1, 0)
+    rightFrame.Position = UDim2.new(0, 165, 0, 0)
     rightFrame.BackgroundColor3 = self.theme.colors.primary
     rightFrame.BorderSizePixel = 0
     rightFrame.Parent = self.parent
@@ -130,10 +138,11 @@ function Tabs:create()
     
     local contentScroll = Instance.new("ScrollingFrame")
     contentScroll.Name = "ContentScroll"
-    contentScroll.Size = UDim2.new(1, -10, 1, -10)
-    contentScroll.Position = UDim2.new(0, 5, 0, 5)
+    -- FIXED: Better padding
+    contentScroll.Size = UDim2.new(1, -8, 1, -8)
+    contentScroll.Position = UDim2.new(0, 4, 0, 4)
     contentScroll.BackgroundTransparency = 1
-    contentScroll.ScrollBarThickness = 6
+    contentScroll.ScrollBarThickness = 4
     contentScroll.ScrollBarImageColor3 = self.theme.colors.accent
     contentScroll.BorderSizePixel = 0
     contentScroll.Parent = rightFrame
@@ -150,11 +159,13 @@ end
 function Tabs:addTab(name)
     local tabBtn = Instance.new("TextButton")
     tabBtn.Name = "Tab_" .. name
-    tabBtn.Size = UDim2.new(1, 0, 0, 35)
+    -- FIXED: Reduced height from 35 to 32 for better proportions
+    tabBtn.Size = UDim2.new(1, 0, 0, 32)
     tabBtn.BackgroundColor3 = self.theme.colors.primary
     tabBtn.Text = name
     tabBtn.TextColor3 = self.theme.colors.textSecondary
-    tabBtn.TextScaled = true
+    -- FIXED: Better text size
+    tabBtn.TextSize = 13
     tabBtn.Font = self.theme.font
     tabBtn.BorderSizePixel = 0
     tabBtn.AutoButtonColor = false
@@ -172,7 +183,8 @@ function Tabs:addTab(name)
     
     local contentList = Instance.new("UIListLayout")
     contentList.SortOrder = Enum.SortOrder.LayoutOrder
-    contentList.Padding = UDim.new(0, 10)
+    -- FIXED: Reduced padding for better element spacing
+    contentList.Padding = UDim.new(0, 6)
     contentList.Parent = tabContent
     
     local tab = {
@@ -232,15 +244,16 @@ function Tabs:selectTab(name)
 end
 
 function Tabs:updateScrollSize()
-    
-    local tabsHeight = #self.tabs * 40
+    -- FIXED: Better scroll size calculation
+    local tabsHeight = #self.tabs * 35 + (#self.tabs - 1) * 3
     self.tabsScroll.CanvasSize = UDim2.new(0, 0, 0, tabsHeight)
     
     if self.activeTab then
         local tab = self.tabs[self.activeTab]
         if tab then
-            local elementsHeight = #tab.elements * 50
-            self.contentScroll.CanvasSize = UDim2.new(0, 0, 0, math.max(elementsHeight, 300))
+            -- FIXED: Better element spacing calculation
+            local elementsHeight = #tab.elements * 46 + (#tab.elements - 1) * 6
+            self.contentScroll.CanvasSize = UDim2.new(0, 0, 0, math.max(elementsHeight, 200))
         end
     end
 end
