@@ -6,8 +6,8 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 local Window = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Window.lua"))()
+local Tabs = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Tabs.lua"))()
 local TextLabel = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/TextLabel.lua"))()
-local Tabs = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Tabs.lua"))() -- FIXED: ADDED THIS LINE
 local Button = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Button.lua"))()
 local Toggle = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Toggle.lua"))()
 local TextBox = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Textbox.lua"))()
@@ -66,10 +66,6 @@ end
 
 function UI:label(text, pos, size, parent)
     return TextLabel:new(text, pos, size, parent, self.theme)
-end
-
-function UI:tabs(parent) -- FIXED: ADDED TABS METHOD
-    return Tabs:new(parent, self.theme)
 end
 
 function UI:corner(parent, radius)
