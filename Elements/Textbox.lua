@@ -11,7 +11,6 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     
     local textboxFrame = Instance.new("Frame")
     textboxFrame.Name = "TextBox"
-    -- FIXED: Reduced height from 50 to 40 for consistency
     textboxFrame.Size = UDim2.new(1, -20, 0, 40)
     textboxFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
     textboxFrame.BackgroundColor3 = theme.colors.secondary
@@ -19,7 +18,6 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     textboxFrame.Parent = parent
     
     local corner = Instance.new("UICorner")
-    -- FIXED: Smaller corner radius for consistency
     corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = textboxFrame
     
@@ -30,13 +28,11 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     
     local textLabel = Instance.new("TextLabel")
     textLabel.Name = "TextBoxLabel"
-    -- FIXED: Better proportions for label
     textLabel.Size = UDim2.new(0.5, -15, 1, 0)
     textLabel.Position = UDim2.new(0, 12, 0, 0)
     textLabel.BackgroundTransparency = 1
     textLabel.Text = placeholder or "TextBox"
     textLabel.TextColor3 = theme.colors.text
-    -- FIXED: Reduced text size
     textLabel.TextSize = 14
     textLabel.Font = theme.font
     textLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -45,7 +41,6 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     
     local textBox = Instance.new("TextBox")
     textBox.Name = "Input"
-    -- FIXED: Better positioning and sizing for input box
     textBox.Size = UDim2.new(0.45, -15, 0, 24)
     textBox.Position = UDim2.new(0.55, 0, 0.5, -12)
     textBox.BackgroundColor3 = theme.colors.primary
@@ -54,7 +49,6 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     textBox.Text = ""
     textBox.TextColor3 = theme.colors.text
     textBox.PlaceholderColor3 = theme.colors.textSecondary
-    -- FIXED: Reduced text size
     textBox.TextSize = 13
     textBox.Font = theme.font
     textBox.TextXAlignment = Enum.TextXAlignment.Center
