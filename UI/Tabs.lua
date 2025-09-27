@@ -18,10 +18,8 @@ function Tabs:new(parent, theme)
 end
 
 function Tabs:corner(parent, radius)
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = radius or self.theme.cornerRadius
-    corner.Parent = parent
-    return corner
+    
+    return nil
 end
 
 function Tabs:stroke(parent, color, thickness)
@@ -53,7 +51,6 @@ function Tabs:create()
     leftFrame.BorderSizePixel = 0
     leftFrame.Parent = self.parent
     
-    self:corner(leftFrame)
     self:stroke(leftFrame, self.theme.colors.border, 1)
     
     local profileFrame = Instance.new("Frame")
@@ -64,8 +61,6 @@ function Tabs:create()
     profileFrame.BorderSizePixel = 0
     profileFrame.Parent = leftFrame
     
-    self:corner(profileFrame)
-    
     local avatar = Instance.new("ImageLabel")
     avatar.Name = "Avatar"
     avatar.Size = UDim2.new(0, 40, 0, 40)
@@ -74,8 +69,6 @@ function Tabs:create()
     avatar.BorderSizePixel = 0
     avatar.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. LocalPlayer.UserId .. "&width=150&height=150&format=png"
     avatar.Parent = profileFrame
-    
-    self:corner(avatar, UDim.new(0, 20))
     
     local nameLabel = Instance.new("TextLabel")
     nameLabel.Name = "PlayerName"
@@ -101,7 +94,6 @@ function Tabs:create()
     displayLabel.TextXAlignment = Enum.TextXAlignment.Left
     displayLabel.Parent = profileFrame
     
-    -- scrollable tabs
     local tabsScroll = Instance.new("ScrollingFrame")
     tabsScroll.Name = "TabsScroll"
     tabsScroll.Size = UDim2.new(1, -10, 1, -75)
@@ -127,7 +119,6 @@ function Tabs:create()
     rightFrame.BorderSizePixel = 0
     rightFrame.Parent = self.parent
     
-    self:corner(rightFrame)
     self:stroke(rightFrame, self.theme.colors.border, 1)
     
     -- scrollable content
@@ -165,8 +156,6 @@ function Tabs:addTab(name)
     tabBtn.AutoButtonColor = false
     tabBtn.Parent = self.tabsScroll
     
-    self:corner(tabBtn)
-    
     local tabContent = Instance.new("Frame")
     tabContent.Name = "Content_" .. name
     tabContent.Size = UDim2.new(1, 0, 1, 0)
@@ -175,13 +164,11 @@ function Tabs:addTab(name)
     tabContent.Visible = false
     tabContent.Parent = self.contentScroll
     
-    -- add layout for automatic element positioning
     local contentList = Instance.new("UIListLayout")
     contentList.SortOrder = Enum.SortOrder.LayoutOrder
     contentList.Padding = UDim.new(0, 10)
     contentList.Parent = tabContent
     
-    -- auto-update content scroll when elements are added
     contentList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         self:updateScrollSize()
     end)
@@ -242,20 +229,17 @@ function Tabs:selectTab(name)
     tab.content.Visible = true
     self.activeTab = name
     
-    -- Update content scroll for selected tab
     self:updateScrollSize()
 end
 
--- proper scroll size calculation
 function Tabs:updateScrollSize()
-    -- Update tabs scroll
+    
     local tabsHeight = 0
     for _, tab in pairs(self.tabs) do
         tabsHeight = tabsHeight + 40
     end
     self.tabsScroll.CanvasSize = UDim2.new(0, 0, 0, tabsHeight)
     
-    -- Update content scroll for active tab
     if self.activeTab then
         local tab = self.tabs[self.activeTab]
         if tab and tab.contentList then
@@ -265,7 +249,6 @@ function Tabs:updateScrollSize()
     end
 end
 
--- add element tracking
 function Tabs:addElementToTab(tabName, element)
     local tab = self.tabs[tabName]
     if tab then
