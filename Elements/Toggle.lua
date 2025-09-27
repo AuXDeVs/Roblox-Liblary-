@@ -12,7 +12,6 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local toggleFrame = Instance.new("Frame")
     toggleFrame.Name = "Toggle"
-    -- FIXED: Reduced height from 50 to 40 for consistency
     toggleFrame.Size = UDim2.new(1, -20, 0, 40)
     toggleFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
     toggleFrame.BackgroundColor3 = theme.colors.secondary
@@ -20,7 +19,6 @@ function Toggle:new(pos, size, parent, theme, state)
     toggleFrame.Parent = parent
     
     local corner = Instance.new("UICorner")
-    -- FIXED: Smaller corner radius for consistency
     corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = toggleFrame
     
@@ -31,13 +29,11 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local textLabel = Instance.new("TextLabel")
     textLabel.Name = "ToggleText"
-    -- FIXED: Better positioning for text
     textLabel.Size = UDim2.new(1, -70, 1, 0)
     textLabel.Position = UDim2.new(0, 12, 0, 0)
     textLabel.BackgroundTransparency = 1
     textLabel.Text = "Toggle"
     textLabel.TextColor3 = theme.colors.text
-    -- FIXED: Reduced text size
     textLabel.TextSize = 14
     textLabel.Font = theme.font
     textLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -46,7 +42,6 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local toggleSwitch = Instance.new("Frame")
     toggleSwitch.Name = "ToggleSwitch"
-    -- FIXED: Smaller, better positioned switch
     toggleSwitch.Size = UDim2.new(0, 42, 0, 22)
     toggleSwitch.Position = UDim2.new(1, -50, 0.5, -11)
     toggleSwitch.BackgroundColor3 = self.state and theme.colors.accent or Color3.fromRGB(60, 60, 60)
@@ -59,7 +54,6 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local switchButton = Instance.new("Frame")
     switchButton.Name = "SwitchButton"
-    -- FIXED: Smaller button with better positioning
     switchButton.Size = UDim2.new(0, 18, 0, 18)
     switchButton.Position = self.state and UDim2.new(1, -20, 0.5, -9) or UDim2.new(0, 2, 0.5, -9)
     switchButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -79,7 +73,6 @@ function Toggle:new(pos, size, parent, theme, state)
     clickButton.MouseButton1Click:Connect(function()
         self.state = not self.state
         
-        -- FIXED: Updated positions for smaller switch
         local newPos = self.state and UDim2.new(1, -20, 0.5, -9) or UDim2.new(0, 2, 0.5, -9)
         local newColor = self.state and theme.colors.accent or Color3.fromRGB(60, 60, 60)
         
