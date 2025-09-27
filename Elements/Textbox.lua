@@ -11,7 +11,7 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     
     local textboxFrame = Instance.new("Frame")
     textboxFrame.Name = "TextBox"
-    textboxFrame.Size = UDim2.new(1, -20, 0, 45)
+    textboxFrame.Size = UDim2.new(1, -20, 0, 50)
     textboxFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
     textboxFrame.BackgroundColor3 = theme.colors.secondary
     textboxFrame.BorderSizePixel = 0
@@ -40,8 +40,8 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     
     local textBox = Instance.new("TextBox")
     textBox.Name = "Input"
-    textBox.Size = UDim2.new(0.5, -20, 0, 30)
-    textBox.Position = UDim2.new(0.5, 5, 0.5, -15)
+    textBox.Size = UDim2.new(0.45, -20, 0, 30)
+    textBox.Position = UDim2.new(0.55, 5, 0.5, -15)
     textBox.BackgroundColor3 = theme.colors.primary
     textBox.BorderSizePixel = 0
     textBox.PlaceholderText = "Enter value"
