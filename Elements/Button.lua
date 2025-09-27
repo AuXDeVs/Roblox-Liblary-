@@ -11,7 +11,7 @@ function Button:new(text, pos, size, parent, theme)
     
     local button = Instance.new("TextButton")
     button.Name = "Button"
-    button.Size = UDim2.new(1, 0, 0, 50)  -- Changed from -20 to 0
+    button.Size = UDim2.new(1, 0, 0, 45)  -- Changed from -20 to 0
     button.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)  -- Changed from 10 to 0
     button.BackgroundColor3 = theme.colors.secondary
     button.BorderSizePixel = 0
