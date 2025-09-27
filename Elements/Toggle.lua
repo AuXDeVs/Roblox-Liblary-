@@ -3,7 +3,7 @@ local TweenService = game:GetService("TweenService")
 local Toggle = {}
 Toggle.__index = Toggle
 
-function Toggle:new(pos, size, parent, theme, state)
+function Toggle:new(text, pos, size, parent, theme, state)
     local self = setmetatable({}, Toggle)
     
     self.theme = theme
@@ -12,14 +12,14 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local toggleFrame = Instance.new("Frame")
     toggleFrame.Name = "Toggle"
-    toggleFrame.Size = UDim2.new(0, 60, 0, 30)
-    toggleFrame.Position = pos
-    toggleFrame.BackgroundColor3 = self.state and theme.colors.success or theme.colors.secondary
+    toggleFrame.Size = UDim2.new(1, -20, 0, 45)
+    toggleFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
+    toggleFrame.BackgroundColor3 = theme.colors.secondary
     toggleFrame.BorderSizePixel = 0
     toggleFrame.Parent = parent
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 15)
+    corner.CornerRadius = UDim.new(0, 12)
     corner.Parent = toggleFrame
     
     local stroke = Instance.new("UIStroke")
@@ -27,17 +27,41 @@ function Toggle:new(pos, size, parent, theme, state)
     stroke.Thickness = 1
     stroke.Parent = toggleFrame
     
-    local toggleButton = Instance.new("Frame")
-    toggleButton.Name = "ToggleButton"
-    toggleButton.Size = UDim2.new(0, 26, 0, 26)
-    toggleButton.Position = self.state and UDim2.new(0, 32, 0, 2) or UDim2.new(0, 2, 0, 2)
-    toggleButton.BackgroundColor3 = theme.colors.text
-    toggleButton.BorderSizePixel = 0
-    toggleButton.Parent = toggleFrame
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Name = "ToggleText"
+    textLabel.Size = UDim2.new(1, -70, 1, 0)
+    textLabel.Position = UDim2.new(0, 15, 0, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = text
+    textLabel.TextColor3 = theme.colors.text
+    textLabel.TextSize = 16
+    textLabel.Font = theme.font
+    textLabel.TextXAlignment = Enum.TextXAlignment.Left
+    textLabel.Parent = toggleFrame
+    
+    local toggleSwitch = Instance.new("Frame")
+    toggleSwitch.Name = "ToggleSwitch"
+    toggleSwitch.Size = UDim2.new(0, 50, 0, 25)
+    toggleSwitch.Position = UDim2.new(1, -60, 0.5, -12.5)
+    toggleSwitch.BackgroundColor3 = self.state and theme.colors.accent or Color3.fromRGB(60, 60, 60)
+    toggleSwitch.BorderSizePixel = 0
+    toggleSwitch.Parent = toggleFrame
+    
+    local switchCorner = Instance.new("UICorner")
+    switchCorner.CornerRadius = UDim.new(0, 12)
+    switchCorner.Parent = toggleSwitch
+    
+    local switchButton = Instance.new("Frame")
+    switchButton.Name = "SwitchButton"
+    switchButton.Size = UDim2.new(0, 21, 0, 21)
+    switchButton.Position = self.state and UDim2.new(1, -23, 0.5, -10.5) or UDim2.new(0, 2, 0.5, -10.5)
+    switchButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    switchButton.BorderSizePixel = 0
+    switchButton.Parent = toggleSwitch
     
     local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 13)
-    buttonCorner.Parent = toggleButton
+    buttonCorner.CornerRadius = UDim.new(0, 10)
+    buttonCorner.Parent = switchButton
     
     local clickButton = Instance.new("TextButton")
     clickButton.Size = UDim2.new(1, 0, 1, 0)
@@ -48,11 +72,11 @@ function Toggle:new(pos, size, parent, theme, state)
     clickButton.MouseButton1Click:Connect(function()
         self.state = not self.state
         
-        local newPos = self.state and UDim2.new(0, 32, 0, 2) or UDim2.new(0, 2, 0, 2)
-        local newColor = self.state and theme.colors.success or theme.colors.secondary
+        local newPos = self.state and UDim2.new(1, -23, 0.5, -10.5) or UDim2.new(0, 2, 0.5, -10.5)
+        local newColor = self.state and theme.colors.accent or Color3.fromRGB(60, 60, 60)
         
-        TweenService:Create(toggleButton, TweenInfo.new(0.3), {Position = newPos}):Play()
-        TweenService:Create(toggleFrame, TweenInfo.new(0.3), {BackgroundColor3 = newColor}):Play()
+        TweenService:Create(switchButton, TweenInfo.new(0.2), {Position = newPos}):Play()
+        TweenService:Create(toggleSwitch, TweenInfo.new(0.2), {BackgroundColor3 = newColor}):Play()
         
         if self.callback then
             self.callback(self.state)
@@ -60,21 +84,11 @@ function Toggle:new(pos, size, parent, theme, state)
     end)
     
     self.toggleFrame = toggleFrame
-    self.toggleButton = toggleButton
     return self
 end
 
 function Toggle:setCallback(callback)
     self.callback = callback
-end
-
-function Toggle:setState(state)
-    self.state = state
-    local newPos = self.state and UDim2.new(0, 32, 0, 2) or UDim2.new(0, 2, 0, 2)
-    local newColor = self.state and self.theme.colors.success or self.theme.colors.secondary
-    
-    TweenService:Create(self.toggleButton, TweenInfo.new(0.3), {Position = newPos}):Play()
-    TweenService:Create(self.toggleFrame, TweenInfo.new(0.3), {BackgroundColor3 = newColor}):Play()
 end
 
 return Toggle
