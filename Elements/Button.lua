@@ -11,19 +11,22 @@ function Button:new(text, pos, size, parent, theme)
     
     local button = Instance.new("TextButton")
     button.Name = "Button"
-    button.Size = UDim2.new(1, -20, 0, 100)
+    -- FIXED: Reduced height from 100 to 40 for better proportions
+    button.Size = UDim2.new(1, -20, 0, 40)
     button.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
     button.BackgroundColor3 = theme.colors.secondary
     button.BorderSizePixel = 0
     button.Text = text
     button.TextColor3 = theme.colors.text
-    button.TextSize = 16
+    -- FIXED: Reduced text size for better fit
+    button.TextSize = 14
     button.Font = theme.font
     button.AutoButtonColor = false
     button.Parent = parent
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 15)
+    -- FIXED: Smaller corner radius for compact look
+    corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = button
     
     local stroke = Instance.new("UIStroke")
