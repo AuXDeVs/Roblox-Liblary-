@@ -12,14 +12,14 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local toggleFrame = Instance.new("Frame")
     toggleFrame.Name = "Toggle"
-    toggleFrame.Size = UDim2.new(1, -20, 0, 40)
-    toggleFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
+    toggleFrame.Size = UDim2.new(1, 0, 0, 45)  -- Changed from -20 to 0
+    toggleFrame.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)  -- Changed from 10 to 0
     toggleFrame.BackgroundColor3 = theme.colors.secondary
     toggleFrame.BorderSizePixel = 0
     toggleFrame.Parent = parent
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
+    corner.CornerRadius = UDim.new(0, 12)
     corner.Parent = toggleFrame
     
     local stroke = Instance.new("UIStroke")
@@ -29,39 +29,38 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local textLabel = Instance.new("TextLabel")
     textLabel.Name = "ToggleText"
-    textLabel.Size = UDim2.new(1, -70, 1, 0)
-    textLabel.Position = UDim2.new(0, 12, 0, 0)
+    textLabel.Size = UDim2.new(1, -80, 1, 0)
+    textLabel.Position = UDim2.new(0, 15, 0, 0)
     textLabel.BackgroundTransparency = 1
     textLabel.Text = "Toggle"
     textLabel.TextColor3 = theme.colors.text
-    textLabel.TextSize = 14
+    textLabel.TextSize = 16
     textLabel.Font = theme.font
     textLabel.TextXAlignment = Enum.TextXAlignment.Left
-    textLabel.TextYAlignment = Enum.TextYAlignment.Center
     textLabel.Parent = toggleFrame
     
     local toggleSwitch = Instance.new("Frame")
     toggleSwitch.Name = "ToggleSwitch"
-    toggleSwitch.Size = UDim2.new(0, 42, 0, 22)
-    toggleSwitch.Position = UDim2.new(1, -50, 0.5, -11)
+    toggleSwitch.Size = UDim2.new(0, 50, 0, 25)
+    toggleSwitch.Position = UDim2.new(1, -60, 0.5, -12.5)
     toggleSwitch.BackgroundColor3 = self.state and theme.colors.accent or Color3.fromRGB(60, 60, 60)
     toggleSwitch.BorderSizePixel = 0
     toggleSwitch.Parent = toggleFrame
     
     local switchCorner = Instance.new("UICorner")
-    switchCorner.CornerRadius = UDim.new(0, 11)
+    switchCorner.CornerRadius = UDim.new(0, 12)
     switchCorner.Parent = toggleSwitch
     
     local switchButton = Instance.new("Frame")
     switchButton.Name = "SwitchButton"
-    switchButton.Size = UDim2.new(0, 18, 0, 18)
-    switchButton.Position = self.state and UDim2.new(1, -20, 0.5, -9) or UDim2.new(0, 2, 0.5, -9)
+    switchButton.Size = UDim2.new(0, 21, 0, 21)
+    switchButton.Position = self.state and UDim2.new(1, -23, 0.5, -10.5) or UDim2.new(0, 2, 0.5, -10.5)
     switchButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     switchButton.BorderSizePixel = 0
     switchButton.Parent = toggleSwitch
     
     local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 9)
+    buttonCorner.CornerRadius = UDim.new(0, 13)
     buttonCorner.Parent = switchButton
     
     local clickButton = Instance.new("TextButton")
@@ -73,7 +72,7 @@ function Toggle:new(pos, size, parent, theme, state)
     clickButton.MouseButton1Click:Connect(function()
         self.state = not self.state
         
-        local newPos = self.state and UDim2.new(1, -20, 0.5, -9) or UDim2.new(0, 2, 0.5, -9)
+        local newPos = self.state and UDim2.new(1, -23, 0.5, -10.5) or UDim2.new(0, 2, 0.5, -10.5)
         local newColor = self.state and theme.colors.accent or Color3.fromRGB(60, 60, 60)
         
         TweenService:Create(switchButton, TweenInfo.new(0.2), {Position = newPos}):Play()
