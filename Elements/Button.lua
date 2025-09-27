@@ -11,7 +11,7 @@ function Button:new(text, pos, size, parent, theme)
     
     local button = Instance.new("TextButton")
     button.Name = "Button"
-    button.Size = UDim2.new(1, -100, 0, 50)
+    button.Size = UDim2.new(1, -20, 0, 100)
     button.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
     button.BackgroundColor3 = theme.colors.secondary
     button.BorderSizePixel = 0
@@ -23,7 +23,7 @@ function Button:new(text, pos, size, parent, theme)
     button.Parent = parent
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 12)
+    corner.CornerRadius = UDim.new(0, 15)
     corner.Parent = button
     
     local stroke = Instance.new("UIStroke")
