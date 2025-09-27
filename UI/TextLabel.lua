@@ -8,7 +8,7 @@ function TextLabel:new(text, pos, size, parent, theme)
     
     local labelFrame = Instance.new("Frame")
     labelFrame.Name = "TextLabel"
-    labelFrame.Size = UDim2.new(1, -20, 0, 35)
+    labelFrame.Size = UDim2.new(1, -20, 0, 40)
     labelFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
     labelFrame.BackgroundColor3 = theme.colors.secondary
     labelFrame.BorderSizePixel = 0
@@ -25,8 +25,8 @@ function TextLabel:new(text, pos, size, parent, theme)
     
     local label = Instance.new("TextLabel")
     label.Name = "Label"
-    label.Size = UDim2.new(1, -20, 1, 0)
-    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Size = UDim2.new(1, -30, 1, 0)
+    label.Position = UDim2.new(0, 15, 0, 0)
     label.BackgroundTransparency = 1
     label.Text = text
     label.TextColor3 = theme.colors.text
