@@ -11,6 +11,9 @@ local TextLabel = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuX
 local Button = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Button.lua"))()
 local Toggle = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Toggle.lua"))()
 local TextBox = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Textbox.lua"))()
+local Slider = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Slider.lua"))()
+local Dropdown = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Dropdown.lua"))()
+local Scrolling = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Scrolling.lua"))()
 
 local UI = {}
 UI.__index = UI
@@ -52,6 +55,10 @@ function UI:window(title, size)
     return Window:new(title, size, self.theme)
 end
 
+function UI:scrolling()
+    return Scrolling:new()
+end
+
 function UI:button(text, pos, size, parent)
     return Button:new(text, pos, size, parent, self.theme)
 end
@@ -62,10 +69,6 @@ end
 
 function UI:textbox(placeholder, pos, size, parent)
     return TextBox:new(placeholder, pos, size, parent, self.theme)
-end
-
-function UI:label(text, pos, size, parent)
-    return TextLabel:new(text, pos, size, parent, self.theme)
 end
 
 function UI:corner(parent, radius)
