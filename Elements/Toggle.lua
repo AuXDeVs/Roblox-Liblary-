@@ -12,15 +12,11 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local toggleFrame = Instance.new("Frame")
     toggleFrame.Name = "Toggle"
-    toggleFrame.Size = UDim2.new(1, 0, 0, 45)  -- Changed from -20 to 0
-    toggleFrame.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)  -- Changed from 10 to 0
+    toggleFrame.Size = UDim2.new(1, -20, 0, 50)
+    toggleFrame.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)
     toggleFrame.BackgroundColor3 = theme.colors.secondary
     toggleFrame.BorderSizePixel = 0
     toggleFrame.Parent = parent
-    
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 12)
-    corner.Parent = toggleFrame
     
     local stroke = Instance.new("UIStroke")
     stroke.Color = theme.colors.border
@@ -47,10 +43,6 @@ function Toggle:new(pos, size, parent, theme, state)
     toggleSwitch.BorderSizePixel = 0
     toggleSwitch.Parent = toggleFrame
     
-    local switchCorner = Instance.new("UICorner")
-    switchCorner.CornerRadius = UDim.new(0, 12)
-    switchCorner.Parent = toggleSwitch
-    
     local switchButton = Instance.new("Frame")
     switchButton.Name = "SwitchButton"
     switchButton.Size = UDim2.new(0, 21, 0, 21)
@@ -58,10 +50,6 @@ function Toggle:new(pos, size, parent, theme, state)
     switchButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     switchButton.BorderSizePixel = 0
     switchButton.Parent = toggleSwitch
-    
-    local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 13)
-    buttonCorner.Parent = switchButton
     
     local clickButton = Instance.new("TextButton")
     clickButton.Size = UDim2.new(1, 0, 1, 0)
