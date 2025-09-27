@@ -11,19 +11,19 @@ function Button:new(text, pos, size, parent, theme)
     
     local button = Instance.new("TextButton")
     button.Name = "Button"
-    button.Size = size
-    button.Position = pos
-    button.BackgroundColor3 = theme.colors.accent
+    button.Size = UDim2.new(1, -20, 0, 45)
+    button.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
+    button.BackgroundColor3 = theme.colors.secondary
     button.BorderSizePixel = 0
     button.Text = text
     button.TextColor3 = theme.colors.text
-    button.TextScaled = true
+    button.TextSize = 16
     button.Font = theme.font
     button.AutoButtonColor = false
     button.Parent = parent
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
+    corner.CornerRadius = UDim.new(0, 12)
     corner.Parent = button
     
     local stroke = Instance.new("UIStroke")
@@ -32,19 +32,17 @@ function Button:new(text, pos, size, parent, theme)
     stroke.Parent = button
     
     button.MouseEnter:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = theme.colors.accentHover}):Play()
-        TweenService:Create(stroke, TweenInfo.new(0.2), {Color = theme.colors.accentHover}):Play()
+        TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = theme.colors.primary}):Play()
     end)
     
     button.MouseLeave:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = theme.colors.accent}):Play()
-        TweenService:Create(stroke, TweenInfo.new(0.2), {Color = theme.colors.border}):Play()
+        TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = theme.colors.secondary}):Play()
     end)
     
     button.MouseButton1Click:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.1), {Size = size - UDim2.new(0, 4, 0, 2)}):Play()
+        TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = theme.colors.accent}):Play()
         wait(0.1)
-        TweenService:Create(button, TweenInfo.new(0.1), {Size = size}):Play()
+        TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = theme.colors.secondary}):Play()
         
         if self.callback then
             self.callback()
