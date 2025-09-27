@@ -3,7 +3,7 @@ local TweenService = game:GetService("TweenService")
 local Toggle = {}
 Toggle.__index = Toggle
 
-function Toggle:new(text, pos, size, parent, theme, state)
+function Toggle:new(pos, size, parent, theme, state)
     local self = setmetatable({}, Toggle)
     
     self.theme = theme
@@ -32,7 +32,7 @@ function Toggle:new(text, pos, size, parent, theme, state)
     textLabel.Size = UDim2.new(1, -70, 1, 0)
     textLabel.Position = UDim2.new(0, 15, 0, 0)
     textLabel.BackgroundTransparency = 1
-    textLabel.Text = text
+    textLabel.Text = "Toggle"
     textLabel.TextColor3 = theme.colors.text
     textLabel.TextSize = 16
     textLabel.Font = theme.font
@@ -84,11 +84,16 @@ function Toggle:new(text, pos, size, parent, theme, state)
     end)
     
     self.toggleFrame = toggleFrame
+    self.textLabel = textLabel
     return self
 end
 
 function Toggle:setCallback(callback)
     self.callback = callback
+end
+
+function Toggle:setText(text)
+    self.textLabel.Text = text
 end
 
 return Toggle
