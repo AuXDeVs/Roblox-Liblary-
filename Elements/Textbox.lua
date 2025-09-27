@@ -3,7 +3,7 @@ local TweenService = game:GetService("TweenService")
 local TextBox = {}
 TextBox.__index = TextBox
 
-function TextBox:new(text, placeholder, pos, size, parent, theme)
+function TextBox:new(placeholder, pos, size, parent, theme)
     local self = setmetatable({}, TextBox)
     
     self.theme = theme
@@ -31,7 +31,7 @@ function TextBox:new(text, placeholder, pos, size, parent, theme)
     textLabel.Size = UDim2.new(0.5, -10, 1, 0)
     textLabel.Position = UDim2.new(0, 15, 0, 0)
     textLabel.BackgroundTransparency = 1
-    textLabel.Text = text
+    textLabel.Text = placeholder or "TextBox"
     textLabel.TextColor3 = theme.colors.text
     textLabel.TextSize = 16
     textLabel.Font = theme.font
@@ -44,7 +44,7 @@ function TextBox:new(text, placeholder, pos, size, parent, theme)
     textBox.Position = UDim2.new(0.5, 5, 0.5, -15)
     textBox.BackgroundColor3 = theme.colors.primary
     textBox.BorderSizePixel = 0
-    textBox.PlaceholderText = placeholder or "Enter value"
+    textBox.PlaceholderText = "Enter value"
     textBox.Text = ""
     textBox.TextColor3 = theme.colors.text
     textBox.PlaceholderColor3 = theme.colors.textSecondary
