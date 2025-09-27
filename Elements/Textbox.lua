@@ -11,15 +11,11 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     
     local textboxFrame = Instance.new("Frame")
     textboxFrame.Name = "TextBox"
-    textboxFrame.Size = UDim2.new(1, 0, 0, 45)  -- Changed from -20 to 0
-    textboxFrame.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)  -- Changed from 10 to 0
+    textboxFrame.Size = UDim2.new(1, -20, 0, 50)
+    textboxFrame.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)
     textboxFrame.BackgroundColor3 = theme.colors.secondary
     textboxFrame.BorderSizePixel = 0
     textboxFrame.Parent = parent
-    
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 12)
-    corner.Parent = textboxFrame
     
     local stroke = Instance.new("UIStroke")
     stroke.Color = theme.colors.border
@@ -52,10 +48,6 @@ function TextBox:new(placeholder, pos, size, parent, theme)
     textBox.Font = theme.font
     textBox.TextXAlignment = Enum.TextXAlignment.Center
     textBox.Parent = textboxFrame
-    
-    local inputCorner = Instance.new("UICorner")
-    inputCorner.CornerRadius = UDim.new(0, 8)
-    inputCorner.Parent = textBox
     
     textBox.Focused:Connect(function()
         TweenService:Create(stroke, TweenInfo.new(0.15), {Color = theme.colors.accent}):Play()
