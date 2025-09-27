@@ -1,6 +1,5 @@
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
-
 local LocalPlayer = Players.LocalPlayer
 
 local Tabs = {}
@@ -48,7 +47,7 @@ function Tabs:create()
     
     local leftFrame = Instance.new("Frame")
     leftFrame.Name = "LeftFrame"
-    leftFrame.Size = UDim2.new(0, 160, 1, 0)
+    leftFrame.Size = UDim2.new(0, 180, 1, 0)
     leftFrame.Position = UDim2.new(0, 0, 0, 0)
     leftFrame.BackgroundColor3 = self.theme.colors.secondary
     leftFrame.BorderSizePixel = 0
@@ -59,8 +58,8 @@ function Tabs:create()
     
     local profileFrame = Instance.new("Frame")
     profileFrame.Name = "Profile"
-    profileFrame.Size = UDim2.new(1, -8, 0, 55)
-    profileFrame.Position = UDim2.new(0, 4, 1, -59)
+    profileFrame.Size = UDim2.new(1, -10, 0, 60)
+    profileFrame.Position = UDim2.new(0, 5, 1, -65)
     profileFrame.BackgroundColor3 = self.theme.colors.primary
     profileFrame.BorderSizePixel = 0
     profileFrame.Parent = leftFrame
@@ -69,58 +68,61 @@ function Tabs:create()
     
     local avatar = Instance.new("ImageLabel")
     avatar.Name = "Avatar"
-    avatar.Size = UDim2.new(0, 35, 0, 35)
-    avatar.Position = UDim2.new(0, 8, 0, 10)
+    avatar.Size = UDim2.new(0, 40, 0, 40)
+    avatar.Position = UDim2.new(0, 10, 0, 10)
     avatar.BackgroundColor3 = self.theme.colors.border
     avatar.BorderSizePixel = 0
     avatar.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. LocalPlayer.UserId .. "&width=150&height=150&format=png"
     avatar.Parent = profileFrame
     
-    self:corner(avatar, UDim.new(0, 17))
+    self:corner(avatar, UDim.new(0, 20))
     
     local nameLabel = Instance.new("TextLabel")
     nameLabel.Name = "PlayerName"
-    nameLabel.Size = UDim2.new(1, -50, 0, 18)
-    nameLabel.Position = UDim2.new(0, 48, 0, 8)
+    nameLabel.Size = UDim2.new(1, -60, 0, 20)
+    nameLabel.Position = UDim2.new(0, 55, 0, 10)
     nameLabel.BackgroundTransparency = 1
     nameLabel.Text = LocalPlayer.Name
     nameLabel.TextColor3 = self.theme.colors.text
-    nameLabel.TextSize = 13
+    nameLabel.TextScaled = true
     nameLabel.Font = self.theme.font
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.Parent = profileFrame
     
     local displayLabel = Instance.new("TextLabel")
     displayLabel.Name = "DisplayName"
-    displayLabel.Size = UDim2.new(1, -50, 0, 14)
-    displayLabel.Position = UDim2.new(0, 48, 0, 28)
+    displayLabel.Size = UDim2.new(1, -60, 0, 15)
+    displayLabel.Position = UDim2.new(0, 55, 0, 30)
     displayLabel.BackgroundTransparency = 1
     displayLabel.Text = "@" .. LocalPlayer.DisplayName
     displayLabel.TextColor3 = self.theme.colors.textSecondary
-    displayLabel.TextSize = 11
+    displayLabel.TextScaled = true
     displayLabel.Font = self.theme.font
     displayLabel.TextXAlignment = Enum.TextXAlignment.Left
     displayLabel.Parent = profileFrame
     
+    -- scrollable tabs
     local tabsScroll = Instance.new("ScrollingFrame")
     tabsScroll.Name = "TabsScroll"
-    tabsScroll.Size = UDim2.new(1, -8, 1, -68)
-    tabsScroll.Position = UDim2.new(0, 4, 0, 4)
+    tabsScroll.Size = UDim2.new(1, -10, 1, -75)
+    tabsScroll.Position = UDim2.new(0, 5, 0, 5)
     tabsScroll.BackgroundTransparency = 1
-    tabsScroll.ScrollBarThickness = 4
+    tabsScroll.ScrollBarThickness = 6
     tabsScroll.ScrollBarImageColor3 = self.theme.colors.accent
     tabsScroll.BorderSizePixel = 0
+    tabsScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    tabsScroll.ScrollingDirection = Enum.ScrollingDirection.Y
     tabsScroll.Parent = leftFrame
     
     local tabsList = Instance.new("UIListLayout")
     tabsList.SortOrder = Enum.SortOrder.LayoutOrder
-    tabsList.Padding = UDim.new(0, 3)
+    tabsList.Padding = UDim.new(0, 5)
     tabsList.Parent = tabsScroll
     
     local rightFrame = Instance.new("Frame")
     rightFrame.Name = "RightFrame"
-    rightFrame.Size = UDim2.new(1, -165, 1, 0)
-    rightFrame.Position = UDim2.new(0, 165, 0, 0)
+    rightFrame.Size = UDim2.new(1, -185, 1, 0)
+    rightFrame.Position = UDim2.new(0, 185, 0, 0)
     rightFrame.BackgroundColor3 = self.theme.colors.primary
     rightFrame.BorderSizePixel = 0
     rightFrame.Parent = self.parent
@@ -128,28 +130,24 @@ function Tabs:create()
     self:corner(rightFrame)
     self:stroke(rightFrame, self.theme.colors.border, 1)
     
+    -- scrollable content
     local contentScroll = Instance.new("ScrollingFrame")
     contentScroll.Name = "ContentScroll"
-    contentScroll.Size = UDim2.new(1, -8, 1, -8)
-    contentScroll.Position = UDim2.new(0, 4, 0, 4)
+    contentScroll.Size = UDim2.new(1, -10, 1, -10)
+    contentScroll.Position = UDim2.new(0, 5, 0, 5)
     contentScroll.BackgroundTransparency = 1
-    contentScroll.ScrollBarThickness = 4
+    contentScroll.ScrollBarThickness = 6
     contentScroll.ScrollBarImageColor3 = self.theme.colors.accent
     contentScroll.BorderSizePixel = 0
+    contentScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    contentScroll.ScrollingDirection = Enum.ScrollingDirection.Y
     contentScroll.Parent = rightFrame
-    
-    -- ADD AUTOMATIC SPACING TO CONTENT
-    local contentList = Instance.new("UIListLayout")
-    contentList.SortOrder = Enum.SortOrder.LayoutOrder
-    contentList.Padding = UDim.new(0, 6)
-    contentList.Parent = contentScroll
     
     self.leftFrame = leftFrame
     self.rightFrame = rightFrame
     self.tabsScroll = tabsScroll
     self.contentScroll = contentScroll
     self.tabsList = tabsList
-    self.contentList = contentList
     
     self:updateScrollSize()
 end
@@ -157,11 +155,11 @@ end
 function Tabs:addTab(name)
     local tabBtn = Instance.new("TextButton")
     tabBtn.Name = "Tab_" .. name
-    tabBtn.Size = UDim2.new(1, 0, 0, 32)
+    tabBtn.Size = UDim2.new(1, 0, 0, 35)
     tabBtn.BackgroundColor3 = self.theme.colors.primary
     tabBtn.Text = name
     tabBtn.TextColor3 = self.theme.colors.textSecondary
-    tabBtn.TextSize = 13
+    tabBtn.TextScaled = true
     tabBtn.Font = self.theme.font
     tabBtn.BorderSizePixel = 0
     tabBtn.AutoButtonColor = false
@@ -177,16 +175,23 @@ function Tabs:addTab(name)
     tabContent.Visible = false
     tabContent.Parent = self.contentScroll
     
+    -- add layout for automatic element positioning
     local contentList = Instance.new("UIListLayout")
     contentList.SortOrder = Enum.SortOrder.LayoutOrder
-    contentList.Padding = UDim.new(0, 6)
+    contentList.Padding = UDim.new(0, 10)
     contentList.Parent = tabContent
+    
+    -- auto-update content scroll when elements are added
+    contentList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        self:updateScrollSize()
+    end)
     
     local tab = {
         name = name,
         button = tabBtn,
         content = tabContent,
-        elements = {}
+        elements = {},
+        contentList = contentList
     }
     
     tabBtn.MouseButton1Click:Connect(function()
@@ -236,18 +241,36 @@ function Tabs:selectTab(name)
     })
     tab.content.Visible = true
     self.activeTab = name
+    
+    -- Update content scroll for selected tab
+    self:updateScrollSize()
 end
 
+-- proper scroll size calculation
 function Tabs:updateScrollSize()
-    local tabsHeight = #self.tabs * 35 + (#self.tabs - 1) * 3
+    -- Update tabs scroll
+    local tabsHeight = 0
+    for _, tab in pairs(self.tabs) do
+        tabsHeight = tabsHeight + 40
+    end
     self.tabsScroll.CanvasSize = UDim2.new(0, 0, 0, tabsHeight)
     
+    -- Update content scroll for active tab
     if self.activeTab then
         local tab = self.tabs[self.activeTab]
-        if tab then
-            local elementsHeight = #tab.elements * 46 + (#tab.elements - 1) * 6
-            self.contentScroll.CanvasSize = UDim2.new(0, 0, 0, math.max(elementsHeight, 200))
+        if tab and tab.contentList then
+            local contentHeight = tab.contentList.AbsoluteContentSize.Y
+            self.contentScroll.CanvasSize = UDim2.new(0, 0, 0, contentHeight + 20)
         end
+    end
+end
+
+-- add element tracking
+function Tabs:addElementToTab(tabName, element)
+    local tab = self.tabs[tabName]
+    if tab then
+        table.insert(tab.elements, element)
+        self:updateScrollSize()
     end
 end
 
