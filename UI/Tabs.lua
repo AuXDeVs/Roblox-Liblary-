@@ -48,7 +48,6 @@ function Tabs:create()
     
     local leftFrame = Instance.new("Frame")
     leftFrame.Name = "LeftFrame"
-    -- FIXED: Reduced width from 180 to 160 for better proportions
     leftFrame.Size = UDim2.new(0, 160, 1, 0)
     leftFrame.Position = UDim2.new(0, 0, 0, 0)
     leftFrame.BackgroundColor3 = self.theme.colors.secondary
@@ -60,7 +59,6 @@ function Tabs:create()
     
     local profileFrame = Instance.new("Frame")
     profileFrame.Name = "Profile"
-    -- FIXED: Reduced height and better positioning
     profileFrame.Size = UDim2.new(1, -8, 0, 55)
     profileFrame.Position = UDim2.new(0, 4, 1, -59)
     profileFrame.BackgroundColor3 = self.theme.colors.primary
@@ -71,7 +69,6 @@ function Tabs:create()
     
     local avatar = Instance.new("ImageLabel")
     avatar.Name = "Avatar"
-    -- FIXED: Smaller avatar
     avatar.Size = UDim2.new(0, 35, 0, 35)
     avatar.Position = UDim2.new(0, 8, 0, 10)
     avatar.BackgroundColor3 = self.theme.colors.border
@@ -83,7 +80,6 @@ function Tabs:create()
     
     local nameLabel = Instance.new("TextLabel")
     nameLabel.Name = "PlayerName"
-    -- FIXED: Better positioning for name
     nameLabel.Size = UDim2.new(1, -50, 0, 18)
     nameLabel.Position = UDim2.new(0, 48, 0, 8)
     nameLabel.BackgroundTransparency = 1
@@ -96,7 +92,6 @@ function Tabs:create()
     
     local displayLabel = Instance.new("TextLabel")
     displayLabel.Name = "DisplayName"
-    -- FIXED: Better positioning for display name
     displayLabel.Size = UDim2.new(1, -50, 0, 14)
     displayLabel.Position = UDim2.new(0, 48, 0, 28)
     displayLabel.BackgroundTransparency = 1
@@ -109,7 +104,6 @@ function Tabs:create()
     
     local tabsScroll = Instance.new("ScrollingFrame")
     tabsScroll.Name = "TabsScroll"
-    -- FIXED: Better positioning and sizing
     tabsScroll.Size = UDim2.new(1, -8, 1, -68)
     tabsScroll.Position = UDim2.new(0, 4, 0, 4)
     tabsScroll.BackgroundTransparency = 1
@@ -120,13 +114,11 @@ function Tabs:create()
     
     local tabsList = Instance.new("UIListLayout")
     tabsList.SortOrder = Enum.SortOrder.LayoutOrder
-    -- FIXED: Reduced padding for better spacing
     tabsList.Padding = UDim.new(0, 3)
     tabsList.Parent = tabsScroll
     
     local rightFrame = Instance.new("Frame")
     rightFrame.Name = "RightFrame"
-    -- FIXED: Adjusted positioning to match new left frame width
     rightFrame.Size = UDim2.new(1, -165, 1, 0)
     rightFrame.Position = UDim2.new(0, 165, 0, 0)
     rightFrame.BackgroundColor3 = self.theme.colors.primary
@@ -138,7 +130,6 @@ function Tabs:create()
     
     local contentScroll = Instance.new("ScrollingFrame")
     contentScroll.Name = "ContentScroll"
-    -- FIXED: Better padding
     contentScroll.Size = UDim2.new(1, -8, 1, -8)
     contentScroll.Position = UDim2.new(0, 4, 0, 4)
     contentScroll.BackgroundTransparency = 1
@@ -147,11 +138,18 @@ function Tabs:create()
     contentScroll.BorderSizePixel = 0
     contentScroll.Parent = rightFrame
     
+    -- ADD AUTOMATIC SPACING TO CONTENT
+    local contentList = Instance.new("UIListLayout")
+    contentList.SortOrder = Enum.SortOrder.LayoutOrder
+    contentList.Padding = UDim.new(0, 6)
+    contentList.Parent = contentScroll
+    
     self.leftFrame = leftFrame
     self.rightFrame = rightFrame
     self.tabsScroll = tabsScroll
     self.contentScroll = contentScroll
     self.tabsList = tabsList
+    self.contentList = contentList
     
     self:updateScrollSize()
 end
@@ -159,12 +157,10 @@ end
 function Tabs:addTab(name)
     local tabBtn = Instance.new("TextButton")
     tabBtn.Name = "Tab_" .. name
-    -- FIXED: Reduced height from 35 to 32 for better proportions
     tabBtn.Size = UDim2.new(1, 0, 0, 32)
     tabBtn.BackgroundColor3 = self.theme.colors.primary
     tabBtn.Text = name
     tabBtn.TextColor3 = self.theme.colors.textSecondary
-    -- FIXED: Better text size
     tabBtn.TextSize = 13
     tabBtn.Font = self.theme.font
     tabBtn.BorderSizePixel = 0
@@ -183,7 +179,6 @@ function Tabs:addTab(name)
     
     local contentList = Instance.new("UIListLayout")
     contentList.SortOrder = Enum.SortOrder.LayoutOrder
-    -- FIXED: Reduced padding for better element spacing
     contentList.Padding = UDim.new(0, 6)
     contentList.Parent = tabContent
     
@@ -244,14 +239,12 @@ function Tabs:selectTab(name)
 end
 
 function Tabs:updateScrollSize()
-    -- FIXED: Better scroll size calculation
     local tabsHeight = #self.tabs * 35 + (#self.tabs - 1) * 3
     self.tabsScroll.CanvasSize = UDim2.new(0, 0, 0, tabsHeight)
     
     if self.activeTab then
         local tab = self.tabs[self.activeTab]
         if tab then
-            -- FIXED: Better element spacing calculation
             local elementsHeight = #tab.elements * 46 + (#tab.elements - 1) * 6
             self.contentScroll.CanvasSize = UDim2.new(0, 0, 0, math.max(elementsHeight, 200))
         end
