@@ -13,7 +13,6 @@ local Toggle = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeV
 local TextBox = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Textbox.lua"))()
 local Slider = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Slider.lua"))()
 local Dropdown = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/Elements/Dropdown.lua"))()
-local Scrolling = loadstring(game:HttpGet("https://raw.githubusercontent.com/AuXDeVs/Roblox-Liblary-/refs/heads/main/UI/Scrolling.lua"))()
 
 local UI = {}
 UI.__index = UI
