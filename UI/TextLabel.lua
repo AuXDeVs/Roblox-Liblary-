@@ -8,15 +8,11 @@ function TextLabel:new(text, pos, size, parent, theme)
     
     local labelFrame = Instance.new("Frame")
     labelFrame.Name = "TextLabel"
-    labelFrame.Size = UDim2.new(1, 0, 0, 45)  -- Changed from -20 to 0
-    labelFrame.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)  -- Changed from 10 to 0
+    labelFrame.Size = UDim2.new(1, -20, 0, 40)
+    labelFrame.Position = UDim2.new(0, 0, 0, pos and pos.Y.Offset or 0)
     labelFrame.BackgroundColor3 = theme.colors.secondary
     labelFrame.BorderSizePixel = 0
     labelFrame.Parent = parent
-    
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 12)
-    corner.Parent = labelFrame
     
     local stroke = Instance.new("UIStroke")
     stroke.Color = theme.colors.border
