@@ -25,7 +25,7 @@ function TextLabel:new(text, pos, size, parent, theme)
     
     local label = Instance.new("TextLabel")
     label.Name = "Label"
-    label.Size = UDim2.new(1, -24, 1, 0)
+    label.Size = UDim2.new(1, -30, 1, 0)
     label.Position = UDim2.new(0, 12, 0, 0)
     label.BackgroundTransparency = 1
     label.Text = text
