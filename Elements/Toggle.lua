@@ -12,7 +12,7 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local toggleFrame = Instance.new("Frame")
     toggleFrame.Name = "Toggle"
-    toggleFrame.Size = UDim2.new(1, -20, 0, 45)
+    toggleFrame.Size = UDim2.new(1, -20, 0, 50)
     toggleFrame.Position = UDim2.new(0, 10, 0, pos and pos.Y.Offset or 0)
     toggleFrame.BackgroundColor3 = theme.colors.secondary
     toggleFrame.BorderSizePixel = 0
@@ -29,7 +29,7 @@ function Toggle:new(pos, size, parent, theme, state)
     
     local textLabel = Instance.new("TextLabel")
     textLabel.Name = "ToggleText"
-    textLabel.Size = UDim2.new(1, -70, 1, 0)
+    textLabel.Size = UDim2.new(1, -80, 1, 0)
     textLabel.Position = UDim2.new(0, 15, 0, 0)
     textLabel.BackgroundTransparency = 1
     textLabel.Text = "Toggle"
@@ -60,7 +60,7 @@ function Toggle:new(pos, size, parent, theme, state)
     switchButton.Parent = toggleSwitch
     
     local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 10)
+    buttonCorner.CornerRadius = UDim.new(0, 13)
     buttonCorner.Parent = switchButton
     
     local clickButton = Instance.new("TextButton")
