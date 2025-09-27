@@ -4,6 +4,7 @@ Credit's for This slider
 Function From Bloodball
 Youngstarts Library 
 Credits Bloodball :>
+Modified by Aux Hub Sliders Bugs Supported PC/Mobile
 
 --]]
 local TweenService = game:GetService("TweenService")
